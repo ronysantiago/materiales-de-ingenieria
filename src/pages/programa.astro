@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+const temas = (await getCollection('temas')).sort((a, b) => a.data.number - b.data.number);
+const laboratorios = (await getCollection('laboratorios')).sort((a, b) => a.data.number - b.data.number);
+---
+<BaseLayout title="Programa de la asignatura" description="Contenido programático teórico y de laboratorio de Materiales de Ingeniería." active="programa">
+  <section class="page-hero"><div class="page-hero-inner">
+    <div class="breadcrumbs"><a href="/">Inicio</a><span aria-hidden="true">/</span><span>Programa</span></div>
+    <span class="eyebrow">Documento de referencia</span>
+    <h1>Programa de Materiales de Ingeniería</h1>
+    <p>Organización del contenido teórico y de laboratorio conforme al programa suministrado para la asignatura.</p>
+  </div></section>
+  <section class="section"><div class="container">
+    <div class="section-heading"><span class="eyebrow">Contenido teórico</span><h2>Diez temas oficiales</h2><p>La numeración y los títulos conservan el orden del programa.</p></div>
+    <div class="program-list">
+      {temas.map((tema) => <a class="program-row" href={`/temas/${tema.id}/`}><span class="program-index">T{String(tema.data.number).padStart(2,'0')}</span><span><h3>{tema.data.title}</h3><p>{tema.data.description}</p></span><span class="program-arrow" aria-hidden="true">↗</span></a>)}
+    </div>
+  </div></section>
+  <section class="section section-soft"><div class="container">
+    <div class="section-heading"><span class="eyebrow">Contenido de laboratorio</span><h2>Siete prácticas</h2><p>Las prácticas se conectan con los temas teóricos correspondientes.</p></div>
+    <div class="program-list">
+      {laboratorios.map((lab) => <a class="program-row" href={`/laboratorios/${lab.id}/`}><span class="program-index">P{String(lab.data.number).padStart(2,'0')}</span><span><h3>{lab.data.title}</h3><p>{lab.data.description}</p></span><span class="program-arrow" aria-hidden="true">↗</span></a>)}
+    </div>
+    <div class="callout"><strong>Responsable académico</strong><p>Docente de la asignatura: Ing. Ramón Tolosa.</p></div>
+  </div></section>
+</BaseLayout>
