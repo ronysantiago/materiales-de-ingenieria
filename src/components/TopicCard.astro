@@ -1,0 +1,20 @@
+---
+interface Props {
+  number: number;
+  title: string;
+  description: string;
+  href: string;
+  tag?: string;
+}
+const { number, title, description, href, tag = 'Contenido teórico' } = Astro.props;
+const formatted = String(number).padStart(2, '0');
+---
+<a class="content-card topic-card" href={href}>
+  <div class="card-topline">
+    <span class="card-number">T{formatted}</span>
+    <span class="card-tag">{tag}</span>
+  </div>
+  <h3>{title}</h3>
+  <p>{description}</p>
+  <span class="card-link">Explorar tema <span aria-hidden="true">↗</span></span>
+</a>
