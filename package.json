@@ -1,0 +1,20 @@
+{
+  "name": "materiales-de-ingenieria-portal",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Portal académico de la asignatura Materiales de Ingeniería",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro",
+    "validate:content": "node scripts/verificar-contenidos.mjs"
+  },
+  "engines": {
+    "node": ">=22.23.4"
+  },
+  "dependencies": {
+    "astro": "7.4.13"
+  }
+}
