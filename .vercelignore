@@ -1,0 +1,9 @@
+# Archivos de trabajo que no necesita el despliegue
+node_modules
+.git
+.vscode
+
+# Configuración local de Obsidian: no es necesaria para generar la web
+boveda/.obsidian
+boveda/.git
+boveda/.trash
