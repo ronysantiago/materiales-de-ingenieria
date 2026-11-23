@@ -1,0 +1,34 @@
+{
+	"nodes":[
+		{"id":"nT01","type":"file","file":"02 - CONTENIDO TEORICO/01 - Generalidades de los materiales/T01 - Generalidades de los materiales","x":0,"y":0,"width":280,"height":150},
+		{"id":"nT02","type":"file","file":"02 - CONTENIDO TEORICO/02 - Transformaciones fuera de equilibrio/T02 - Introducción a las transformaciones fuera de equilibrio","x":330,"y":0,"width":280,"height":150},
+		{"id":"nT03","type":"file","file":"02 - CONTENIDO TEORICO/03 - Materiales ferrosos/T03 - Materiales ferrosos","x":660,"y":0,"width":280,"height":150},
+		{"id":"nT04","type":"file","file":"02 - CONTENIDO TEORICO/04 - Materiales no ferrosos/T04 - Materiales no ferrosos","x":990,"y":0,"width":280,"height":150},
+		{"id":"nT05","type":"file","file":"02 - CONTENIDO TEORICO/05 - Materiales cerámicos/T05 - Materiales cerámicos","x":1320,"y":0,"width":280,"height":150},
+		{"id":"nT06","type":"file","file":"02 - CONTENIDO TEORICO/06 - Materiales poliméricos/T06 - Materiales poliméricos","x":0,"y":300,"width":280,"height":150},
+		{"id":"nT07","type":"file","file":"02 - CONTENIDO TEORICO/07 - Materiales compuestos/T07 - Materiales compuestos","x":330,"y":300,"width":280,"height":150},
+		{"id":"nT08","type":"file","file":"02 - CONTENIDO TEORICO/08 - Materiales semiconductores/T08 - Materiales semiconductores","x":660,"y":300,"width":280,"height":150},
+		{"id":"nT09","type":"file","file":"02 - CONTENIDO TEORICO/09 - Corrosión/T09 - Corrosión","x":990,"y":300,"width":280,"height":150},
+		{"id":"nT10","type":"file","file":"02 - CONTENIDO TEORICO/10 - Selección de materiales/T10 - Selección de materiales","x":1320,"y":300,"width":280,"height":150},
+		{"id":"nP01","type":"file","file":"03 - LABORATORIOS/01 - Puntos críticos de los aceros/P01 - Los puntos críticos de los aceros","x":50,"y":760,"width":350,"height":170},
+		{"id":"nP02","type":"file","file":"03 - LABORATORIOS/02 - Recocido y normalizado/P02 - Tratamientos térmicos del acero: recocido de regeneración y normalizado","x":470,"y":760,"width":350,"height":170},
+		{"id":"nP03","type":"file","file":"03 - LABORATORIOS/03 - Temple y revenido/P03 - Tratamientos térmicos del acero: temple y revenido","x":890,"y":760,"width":350,"height":170},
+		{"id":"nP04","type":"file","file":"03 - LABORATORIOS/04 - Tratamientos de aceros inoxidables/P04 - Tratamientos térmicos de los aceros inoxidables","x":1310,"y":760,"width":350,"height":170},
+		{"id":"nP05","type":"file","file":"03 - LABORATORIOS/05 - Tratamientos térmicos del aluminio/P05 - Tratamientos térmicos del aluminio","x":50,"y":1020,"width":350,"height":170},
+		{"id":"nP06","type":"file","file":"03 - LABORATORIOS/06 - Materiales cerámicos/P06 - Materiales cerámicos","x":470,"y":1020,"width":350,"height":170},
+		{"id":"nP07","type":"file","file":"03 - LABORATORIOS/07 - Materiales poliméricos y compuestos/P07 - Materiales poliméricos y compuestos","x":890,"y":1020,"width":350,"height":170}
+	],
+	"edges":[
+		{"id":"eP01T02","fromNode":"nT02","fromSide":"bottom","toNode":"nP01","toSide":"top","color":"4"},
+		{"id":"eP01T03","fromNode":"nT03","fromSide":"bottom","toNode":"nP01","toSide":"top","color":"4"},
+		{"id":"eP02T02","fromNode":"nT02","fromSide":"bottom","toNode":"nP02","toSide":"top","color":"4"},
+		{"id":"eP02T03","fromNode":"nT03","fromSide":"bottom","toNode":"nP02","toSide":"top","color":"4"},
+		{"id":"eP03T02","fromNode":"nT02","fromSide":"bottom","toNode":"nP03","toSide":"top","color":"4"},
+		{"id":"eP03T03","fromNode":"nT03","fromSide":"bottom","toNode":"nP03","toSide":"top","color":"4"},
+		{"id":"eP04T03","fromNode":"nT03","fromSide":"bottom","toNode":"nP04","toSide":"top","color":"4"},
+		{"id":"eP05T04","fromNode":"nT04","fromSide":"bottom","toNode":"nP05","toSide":"top","color":"4"},
+		{"id":"eP06T05","fromNode":"nT05","fromSide":"bottom","toNode":"nP06","toSide":"top","color":"4"},
+		{"id":"eP07T06","fromNode":"nT06","fromSide":"bottom","toNode":"nP07","toSide":"top","color":"4"},
+		{"id":"eP07T07","fromNode":"nT07","fromSide":"bottom","toNode":"nP07","toSide":"top","color":"4"}
+	]
+}
