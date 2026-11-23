@@ -1,0 +1,108 @@
+---
+import '@styles/global.css';
+import 'katex/dist/katex.min.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  active?: 'inicio' | 'programa' | 'temas' | 'laboratorios' | 'mapa' | 'buscar' | 'boveda' | 'grafo';
+}
+
+const {
+  title = 'Materiales de Ingeniería',
+  description = 'Portal académico de la asignatura Materiales de Ingeniería — Universidad de Los Andes.',
+  active = 'inicio',
+} = Astro.props;
+const fullTitle = title === 'Materiales de Ingeniería' ? title : `${title} | Materiales de Ingeniería`;
+const navItems = [
+  { label: 'Inicio', href: '/', key: 'inicio' },
+  { label: 'Programa', href: '/programa/', key: 'programa' },
+  { label: 'Temas', href: '/temas/', key: 'temas' },
+  { label: 'Laboratorios', href: '/laboratorios/', key: 'laboratorios' },
+  { label: 'Bóveda', href: '/boveda/', key: 'boveda' },
+  { label: 'Grafo', href: '/grafo/', key: 'grafo' },
+];
+---
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#102235" />
+    <meta name="description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>{fullTitle}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#contenido">Saltar al contenido</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="/" aria-label="Materiales de Ingeniería, inicio">
+          <span class="brand-mark" aria-hidden="true">ULA</span>
+          <span class="brand-copy">
+            <strong>Materiales de Ingeniería</strong>
+            <small>Universidad de Los Andes</small>
+          </span>
+        </a>
+        <button class="mobile-menu-button" type="button" aria-expanded="false" aria-controls="main-navigation">
+          <span class="sr-only">Abrir menú</span>
+          <span></span><span></span><span></span>
+        </button>
+        <nav class="main-navigation" id="main-navigation" aria-label="Navegación principal">
+          {navItems.map((item) => (
+            <a href={item.href} class:list={['nav-link', { 'is-active': active === item.key }]} aria-current={active === item.key ? 'page' : undefined}>
+              {item.label}
+            </a>
+          ))}
+          <a class="nav-search" href="/buscar/" aria-label="Buscar en el portal" title="Buscar">⌕</a>
+        </nav>
+      </div>
+    </header>
+
+    <main id="contenido">
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <div>
+          <a class="footer-brand" href="/">Materiales de Ingeniería</a>
+          <p>Universidad de Los Andes · Portal académico.</p>
+        </div>
+        <div class="footer-meta">
+          <span>Docente: <strong>Ing. Ramón Tolosa</strong></span>
+          <span>Contenido estructurado a partir del programa académico de la asignatura.</span>
+        </div>
+        <span class="footer-mark">ULA · MI</span>
+      </div>
+    </footer>
+
+    <script>
+      const menuButton = document.querySelector('.mobile-menu-button');
+      const navigation = document.querySelector('#main-navigation');
+      menuButton?.addEventListener('click', () => {
+        const isOpen = menuButton.getAttribute('aria-expanded') === 'true';
+        menuButton.setAttribute('aria-expanded', String(!isOpen));
+        navigation?.classList.toggle('is-open', !isOpen);
+      });
+
+      // Los bloques Mermaid se convierten en diagramas interactivos solo cuando existen.
+      const mermaidBlocks = [...document.querySelectorAll('pre code.language-mermaid')];
+      if (mermaidBlocks.length) {
+        const { default: mermaid } = await import('mermaid');
+        const diagramNodes = mermaidBlocks.map((code) => {
+          const diagram = document.createElement('div');
+          diagram.className = 'mermaid';
+          diagram.textContent = code.textContent || '';
+          code.closest('pre')?.replaceWith(diagram);
+          return diagram;
+        });
+        mermaid.initialize({ startOnLoad: false, securityLevel: 'strict', theme: 'base' });
+        await mermaid.run({ nodes: diagramNodes });
+      }
+    </script>
+  </body>
+</html>

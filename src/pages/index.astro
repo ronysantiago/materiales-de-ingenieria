@@ -1,0 +1,102 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import TopicCard from '@components/TopicCard.astro';
+import LabCard from '@components/LabCard.astro';
+import SectionHeading from '@components/SectionHeading.astro';
+import MaterialsTetrahedron from '@components/MaterialsTetrahedron.astro';
+import manifest from '../data/obsidian-manifest.json';
+
+const temas = (await getCollection('temas')).sort((a, b) => a.data.number - b.data.number);
+const laboratorios = (await getCollection('laboratorios')).sort((a, b) => a.data.number - b.data.number);
+const featuredTopics = temas.slice(0, 3);
+const featuredLabs = laboratorios.slice(0, 2);
+const vaultCount = manifest.count ?? 0;
+---
+<BaseLayout title="Materiales de Ingeniería" description="Portal académico de Materiales de Ingeniería de la Universidad de Los Andes. Docente: Ing. Ramón Tolosa." active="inicio">
+  <section class="hero hero-home">
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <div class="university-lockup">
+          <span class="university-seal">ULA</span>
+          <span><strong>Universidad de Los Andes</strong><small>Portal académico · Ingeniería</small></span>
+        </div>
+        <span class="eyebrow">Asignatura · Materiales de Ingeniería</span>
+        <div class="professor-chip"><span class="professor-dot"></span><span>Docente de la asignatura</span><strong>Ing. Ramón Tolosa</strong></div>
+        <h1>Comprender los materiales para <span>tomar mejores decisiones de ingeniería.</span></h1>
+        <p class="hero-lead">Explora sus propiedades, transformaciones, procesos de fabricación y aplicaciones. Conecta los fundamentos teóricos con las prácticas de laboratorio y los criterios de selección de materiales.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="/programa/">Explorar el programa <span aria-hidden="true">↗</span></a>
+          <a class="button button-ghost" href="/boveda/">Abrir biblioteca de notas</a>
+        </div>
+        <div class="hero-footnote"><span class="hero-footnote-line"></span>Contenido organizado conforme al programa académico de la asignatura.</div>
+      </div>
+      <div class="hero-visual">
+        <MaterialsTetrahedron />
+      </div>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="stats-grid" aria-label="Resumen del programa">
+      <div class="stat-card"><span class="stat-value">10</span><span class="stat-label">Temas teóricos oficiales</span></div>
+      <div class="stat-card"><span class="stat-value">07</span><span class="stat-label">Prácticas de laboratorio</span></div>
+      <div class="stat-card"><span class="stat-value">17</span><span class="stat-label">Unidades del programa</span></div>
+      <div class="stat-card"><span class="stat-value">{vaultCount}</span><span class="stat-label">Notas de Obsidian integradas</span></div>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-topline">
+        <SectionHeading eyebrow="Contenido teórico" title="Una ruta para estudiar los materiales" text="Diez temas organizados según el contenido programático de Materiales de Ingeniería." />
+        <a class="text-link" href="/temas/">Ver los diez temas <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="card-grid">
+        {featuredTopics.map((topic) => <TopicCard number={topic.data.number} title={topic.data.title} description={topic.data.description} href={`/temas/${topic.id}/`} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-soft">
+    <div class="container">
+      <div class="section-topline">
+        <SectionHeading eyebrow="Trabajo experimental" title="Del fundamento al laboratorio" text="Siete prácticas vinculadas con los tratamientos térmicos, los metales, los cerámicos, los polímeros y los compuestos." />
+        <a class="text-link" href="/laboratorios/">Ver las siete prácticas <span aria-hidden="true">→</span></a>
+      </div>
+      <div class="card-grid two">
+        {featuredLabs.map((lab) => <LabCard number={lab.data.number} title={lab.data.title} description={lab.data.description} href={`/laboratorios/${lab.id}/`} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="knowledge-feature">
+        <div class="knowledge-feature-copy">
+          <span class="eyebrow">Conocimiento interconectado</span>
+          <h2>Una asignatura, muchos vínculos.</h2>
+          <p>La bóveda de Obsidian reúne notas, laboratorios, conceptos, ejercicios y recursos. El portal permite recorrer ese conocimiento y descubrir cómo se relacionan sus contenidos.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="/grafo/">Explorar el grafo global <span aria-hidden="true">↗</span></a>
+            <a class="button button-ghost-dark" href="/boveda/">Consultar la bóveda</a>
+          </div>
+        </div>
+        <div class="knowledge-feature-stats">
+          <div><strong>{vaultCount}</strong><span>notas incorporadas</span></div>
+          <div><strong>{manifest.attachmentCount ?? 0}</strong><span>recursos adjuntos</span></div>
+          <div><strong>[[…]]</strong><span>enlaces de Obsidian reconocidos</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section section-compact section-soft">
+    <div class="container">
+      <div class="section-topline">
+        <SectionHeading eyebrow="Identidad académica" title="Universidad de Los Andes" text="Materiales de Ingeniería · Docente: Ing. Ramón Tolosa. Este portal organiza el contenido teórico y experimental de la asignatura y se amplía progresivamente con recursos de estudio." />
+        <a class="text-link" href="/programa/">Consultar programa oficial <span aria-hidden="true">→</span></a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

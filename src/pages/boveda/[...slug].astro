@@ -1,0 +1,40 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '@layouts/BaseLayout.astro';
+import manifest from '../../data/obsidian-manifest.json';
+
+export async function getStaticPaths() {
+  const notes = await getCollection('boveda');
+  return notes.map((entry) => ({ params: { slug: entry.data.routeSlug }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const { Content } = await render(entry);
+interface ManifestNote { id: string; title: string; route: string; backlinks: string[]; outlinks: string[]; }
+const vaultManifest = manifest as unknown as { notes: ManifestNote[] };
+const current = vaultManifest.notes.find((note) => note.id === entry.data.routeSlug);
+const backlinks = (current?.backlinks ?? []).map((id) => vaultManifest.notes.find((note) => note.id === id)).filter(Boolean);
+const outlinks = (current?.outlinks ?? []).map((id) => vaultManifest.notes.find((note) => note.id === id)).filter(Boolean);
+const tags = entry.data.tags ?? [];
+---
+<BaseLayout title={entry.data.title} description={entry.data.summary || `Nota de la bóveda: ${entry.data.title}`} active="boveda">
+  <section class="page-hero"><div class="page-hero-inner">
+    <div class="breadcrumbs"><a href="/">Inicio</a><span aria-hidden="true">/</span><a href="/boveda/">Bóveda</a><span aria-hidden="true">/</span><span>{entry.data.title}</span></div>
+    <span class="eyebrow">{entry.data.category}</span>
+    <h1>{entry.data.title}</h1>
+    <p>{entry.data.summary || 'Documento académico integrado desde la bóveda de Obsidian.'}</p>
+    <div class="vault-summary-pills"><span>{entry.data.vaultFolder}</span>{tags.slice(0, 5).map((tag) => <span>#{tag}</span>)}</div>
+  </div></section>
+  <div class="container vault-note-layout">
+    <article class="detail-content vault-note-content">
+      <div class="prose"><Content /></div>
+      <div class="vault-source-note"><strong>Origen:</strong> {entry.data.sourcePath}</div>
+    </article>
+    <aside class="detail-sidebar">
+      <section class="sidebar-card"><h3>Documento</h3><p><strong>Materiales de Ingeniería</strong><br />Universidad de Los Andes<br />Docente: Ing. Ramón Tolosa</p></section>
+      {outlinks.length > 0 && <section class="sidebar-card"><h3>Notas relacionadas</h3><div class="related-list">{outlinks.map((note) => <a class="related-link" href={note.route}>{note.title}</a>)}</div></section>}
+      {backlinks.length > 0 && <section class="sidebar-card"><h3>Notas que enlazan aquí</h3><div class="related-list">{backlinks.map((note) => <a class="related-link" href={note.route}>{note.title}</a>)}</div></section>}
+      <section class="sidebar-card"><h3>Explorar la bóveda</h3><div class="related-list"><a class="related-link" href="/boveda/">Todas las carpetas</a><a class="related-link" href="/grafo/">Grafo global de conocimientos</a><a class="related-link" href="/buscar/">Buscar en el portal</a></div></section>
+    </aside>
+  </div>
+</BaseLayout>

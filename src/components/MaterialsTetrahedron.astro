@@ -1,0 +1,40 @@
+<div class="tetrahedron-card">
+  <div class="tetrahedron-heading">
+    <span class="tetrahedron-kicker">Marco conceptual</span>
+    <strong>Tetraedro de los materiales</strong>
+  </div>
+  <svg class="materials-tetrahedron" viewBox="0 0 500 390" role="img" aria-labelledby="tetra-title tetra-desc">
+    <title id="tetra-title">Tetraedro de la ciencia e ingeniería de materiales</title>
+    <desc id="tetra-desc">Diagrama que relaciona procesamiento, estructura, propiedades y desempeño o aplicaciones de los materiales.</desc>
+    <defs>
+      <linearGradient id="face-processing" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#8db6c9" stop-opacity=".8"/><stop offset="1" stop-color="#447d9a" stop-opacity=".35"/></linearGradient>
+      <linearGradient id="face-structure" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d6a36d" stop-opacity=".68"/><stop offset="1" stop-color="#a96e43" stop-opacity=".35"/></linearGradient>
+      <linearGradient id="face-properties" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8fb9a7" stop-opacity=".72"/><stop offset="1" stop-color="#3e806d" stop-opacity=".32"/></linearGradient>
+      <filter id="vertex-shadow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="5"/></filter>
+    </defs>
+    <g class="tetra-faces">
+      <polygon points="250,48 76,292 250,192" fill="url(#face-structure)" />
+      <polygon points="250,48 250,192 424,292" fill="url(#face-processing)" />
+      <polygon points="76,292 250,192 424,292" fill="url(#face-properties)" />
+    </g>
+    <g class="tetra-lines" fill="none" stroke="#e9f1f5" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M250 48 L76 292 L424 292 Z" />
+      <path d="M250 48 L250 192 L76 292 M250 192 L424 292" stroke-opacity=".88" />
+      <path d="M76 292 L424 292" stroke-dasharray="5 7" stroke-opacity=".55" />
+    </g>
+    <g class="tetra-vertices">
+      <circle cx="250" cy="48" r="15" fill="#d8a776" opacity=".22" filter="url(#vertex-shadow)"/><circle cx="250" cy="48" r="7" fill="#f5d5b1" stroke="#fff" stroke-width="2"/>
+      <circle cx="76" cy="292" r="15" fill="#d8a776" opacity=".22" filter="url(#vertex-shadow)"/><circle cx="76" cy="292" r="7" fill="#e5b68d" stroke="#fff" stroke-width="2"/>
+      <circle cx="424" cy="292" r="15" fill="#8fb9a7" opacity=".22" filter="url(#vertex-shadow)"/><circle cx="424" cy="292" r="7" fill="#a6d4c0" stroke="#fff" stroke-width="2"/>
+      <circle cx="250" cy="192" r="15" fill="#8db6c9" opacity=".22" filter="url(#vertex-shadow)"/><circle cx="250" cy="192" r="7" fill="#b2d6e6" stroke="#fff" stroke-width="2"/>
+    </g>
+    <g class="tetra-labels" fill="#f4f7fa" font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="750" letter-spacing="1.15">
+      <text x="250" y="24" text-anchor="middle">PROCESAMIENTO</text>
+      <text x="67" y="328" text-anchor="start">ESTRUCTURA</text>
+      <text x="433" y="328" text-anchor="end">PROPIEDADES</text>
+      <text x="250" y="224" text-anchor="middle" fill="#fff">DESEMPEÑO</text>
+    </g>
+    <text x="250" y="360" class="tetra-caption" text-anchor="middle" fill="#aebdcb" font-family="Inter, system-ui, sans-serif" font-size="11">Aplicaciones · comportamiento en servicio · selección</text>
+  </svg>
+  <p class="tetrahedron-note">Los procesos modifican la estructura; la estructura condiciona las propiedades y, en conjunto, determinan el desempeño del material en servicio.</p>
+</div>

@@ -1,0 +1,151 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import manifest from '../../data/obsidian-manifest.json';
+
+interface ManifestNote {
+  id: string;
+  title: string;
+  sourcePath: string;
+  route: string;
+  folder: string;
+  category: string;
+  tags: string[];
+  summary: string;
+  backlinks: string[];
+}
+interface ManifestAsset {
+  sourcePath: string;
+  url: string;
+  folder: string;
+  extension: string;
+  size: number;
+}
+const vaultManifest = manifest as unknown as {
+  count: number;
+  attachmentCount: number;
+  folders: string[];
+  notes: ManifestNote[];
+  attachments: ManifestAsset[];
+};
+const notes = vaultManifest.notes ?? [];
+const attachments = vaultManifest.attachments ?? [];
+const groups = (vaultManifest.folders ?? []).map((folder) => ({
+  folder,
+  notes: notes.filter((note) => note.folder === folder),
+}));
+const assetGroups = [...new Set(attachments.map((asset) => asset.folder))].sort((a, b) => a.localeCompare(b, 'es'))
+  .map((folder) => ({ folder, assets: attachments.filter((asset) => asset.folder === folder) }));
+const formatBytes = (bytes: number) => {
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
+  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+};
+const fileKind = (extension: string) => {
+  if (['.png', '.jpg', '.jpeg', '.gif', '.webp', '.svg', '.avif', '.bmp', '.tif', '.tiff'].includes(extension)) return 'IMG';
+  if (extension === '.pdf') return 'PDF';
+  if (['.mp4', '.webm', '.mov', '.m4v'].includes(extension)) return 'VID';
+  if (['.xlsx', '.xls', '.csv', '.ods'].includes(extension)) return 'DAT';
+  if (['.doc', '.docx', '.odt', '.ppt', '.pptx'].includes(extension)) return 'DOC';
+  return extension.replace('.', '').slice(0, 4).toUpperCase() || 'FILE';
+};
+---
+<BaseLayout title="Bóveda académica" description="Explorador de notas, carpetas y recursos provenientes de la bóveda de Obsidian de Materiales de Ingeniería." active="boveda">
+  <section class="page-hero"><div class="page-hero-inner">
+    <div class="breadcrumbs"><a href="/">Inicio</a><span aria-hidden="true">/</span><span>Bóveda</span></div>
+    <span class="eyebrow">Conocimiento académico</span>
+    <h1>Biblioteca de Obsidian</h1>
+    <p>Una vista web de la bóveda académica: notas, carpetas, conceptos, laboratorios, ejercicios y recursos relacionados.</p>
+    <div class="vault-summary-pills"><span>{vaultManifest.count ?? 0} notas</span><span>{vaultManifest.attachmentCount ?? 0} adjuntos</span><span>{groups.length} carpetas con notas</span></div>
+  </div></section>
+  <section class="section"><div class="container">
+    {(notes.length > 0 || attachments.length > 0) ? (
+      <>
+        <div class="vault-browser-toolbar">
+          <label class="graph-control"><span>Buscar en la bóveda</span><input id="vault-search" class="field" type="search" placeholder="Buscar por título, carpeta, etiqueta o archivo…" autocomplete="off" /></label>
+          <p id="vault-search-count" class="graph-status">{notes.length} notas · {attachments.length} adjuntos.</p>
+        </div>
+        {notes.length > 0 && <>
+          <div class="vault-content-heading"><span class="eyebrow">Documentos Markdown</span><h2>Notas y carpetas</h2></div>
+          <div class="vault-folder-grid" id="vault-folder-grid">
+            {groups.map((group) => (
+              <section class="vault-folder-card" data-vault-folder>
+                <div class="vault-folder-heading"><span class="vault-folder-icon">▱</span><div><h2>{group.folder}</h2><span>{group.notes.length} notas</span></div></div>
+                <div class="vault-note-list">
+                  {group.notes.map((note) => (
+                    <a class="vault-note-row" href={note.route} data-vault-note data-search={`${note.title} ${note.sourcePath} ${(note.tags ?? []).join(' ')}`.toLocaleLowerCase('es')}>
+                      <span class="vault-note-icon">MD</span>
+                      <span class="vault-note-copy"><strong>{note.title}</strong><small>{note.sourcePath}</small></span>
+                      <span class="vault-note-arrow">↗</span>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </>}
+
+        {attachments.length > 0 && <>
+          <div class="vault-content-heading vault-attachments-heading"><span class="eyebrow">Recursos vinculados</span><h2>Archivos adjuntos</h2><p>Documentos, imágenes, vídeos, datos y otros recursos conservados desde las carpetas originales de Obsidian.</p></div>
+          <div class="vault-folder-grid" id="vault-attachment-grid">
+            {assetGroups.map((group) => (
+              <section class="vault-folder-card" data-asset-folder>
+                <div class="vault-folder-heading"><span class="vault-folder-icon">▧</span><div><h2>{group.folder}</h2><span>{group.assets.length} archivos</span></div></div>
+                <div class="vault-note-list">
+                  {group.assets.map((asset) => (
+                    <a class="vault-note-row vault-asset-row" href={asset.url} target="_blank" rel="noopener noreferrer" data-vault-asset data-search={`${asset.sourcePath} ${asset.folder} ${asset.extension}`.toLocaleLowerCase('es')}>
+                      <span class="vault-note-icon vault-asset-icon">{fileKind(asset.extension)}</span>
+                      <span class="vault-note-copy"><strong>{asset.sourcePath.split('/').at(-1)}</strong><small>{asset.sourcePath} · {formatBytes(asset.size)}</small></span>
+                      <span class="vault-note-arrow">↗</span>
+                    </a>
+                  ))}
+                </div>
+              </section>
+            ))}
+          </div>
+        </>}
+        <p class="empty-state" id="vault-empty-search">No hay notas ni archivos que coincidan con la búsqueda.</p>
+      </>
+    ) : (
+      <div class="vault-empty-state vault-index-empty">
+        <div class="vault-empty-icon">▤</div>
+        <span class="eyebrow">Preparada para Obsidian</span>
+        <h2>La biblioteca aparecerá aquí cuando cargues la bóveda.</h2>
+        <p>Sube el contenido de tu bóveda dentro de <code>boveda/</code> en la raíz del repositorio. Conserva los nombres y la estructura original de las carpetas. El proceso de compilación leerá las notas Markdown y los adjuntos, y generará automáticamente esta biblioteca.</p>
+        <div class="vault-folder-preview">
+          <span>00 - INICIO</span><span>01 - PROGRAMA</span><span>02 - CONTENIDO TEORICO</span><span>03 - LABORATORIOS</span><span>04 - CONCEPTOS TRANSVERSALES</span><span>05 - BIBLIOTECA</span><span>06 - RECURSOS</span><span>07 - EJERCICIOS</span><span>08 - GLOSARIO</span><span>90 - PLANTILLAS</span><span>99 - ARCHIVO</span>
+        </div>
+        <a class="button button-primary" href="/grafo/">Ver el grafo de conocimientos</a>
+      </div>
+    )}
+  </div></section>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#vault-search');
+  const noteRows = [...document.querySelectorAll<HTMLElement>('[data-vault-note]')];
+  const assetRows = [...document.querySelectorAll<HTMLElement>('[data-vault-asset]')];
+  const folders = [...document.querySelectorAll<HTMLElement>('[data-vault-folder]')];
+  const assetFolders = [...document.querySelectorAll<HTMLElement>('[data-asset-folder]')];
+  const empty = document.querySelector<HTMLElement>('#vault-empty-search');
+  const count = document.querySelector<HTMLElement>('#vault-search-count');
+  input?.addEventListener('input', () => {
+    const query = input.value.trim().toLocaleLowerCase('es');
+    let visibleNotes = 0;
+    let visibleAssets = 0;
+    for (const note of noteRows) {
+      const matches = !query || (note.dataset.search || '').includes(query);
+      note.hidden = !matches;
+      if (matches) visibleNotes++;
+    }
+    for (const asset of assetRows) {
+      const matches = !query || (asset.dataset.search || '').includes(query);
+      asset.hidden = !matches;
+      if (matches) visibleAssets++;
+    }
+    for (const folder of folders) folder.hidden = !folder.querySelector('[data-vault-note]:not([hidden])');
+    for (const folder of assetFolders) folder.hidden = !folder.querySelector('[data-vault-asset]:not([hidden])');
+    const totalVisible = visibleNotes + visibleAssets;
+    if (empty) empty.style.display = totalVisible ? 'none' : 'block';
+    if (count) count.textContent = `${visibleNotes} notas · ${visibleAssets} adjuntos visibles.`;
+  });
+</script>

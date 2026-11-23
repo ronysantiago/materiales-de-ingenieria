@@ -1,0 +1,18 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import VaultGraph from '@components/VaultGraph.astro';
+import graph from '../../data/obsidian-graph.json';
+---
+<BaseLayout title="Grafo global de conocimientos" description="Red interactiva de enlaces entre las notas de Obsidian de Materiales de Ingeniería." active="grafo">
+  <section class="page-hero"><div class="page-hero-inner">
+    <div class="breadcrumbs"><a href="/">Inicio</a><span aria-hidden="true">/</span><span>Grafo global</span></div>
+    <span class="eyebrow">Red de conocimiento</span>
+    <h1>Grafo global de la bóveda</h1>
+    <p>Explora cómo se conectan las notas de la asignatura. Cada nodo representa un documento y cada línea representa un enlace interno detectado en Obsidian.</p>
+    <div class="vault-summary-pills"><span>{graph.count} notas</span><span>{graph.edgeCount} conexiones</span><span>Enlaces internos [[…]]</span></div>
+  </div></section>
+  <section class="section"><div class="container">
+    <div class="section-heading"><span class="eyebrow">Exploración interactiva</span><h2>Recorre las relaciones entre documentos</h2><p>Busca por título, filtra por carpeta, mueve los nodos y abre directamente cada nota.</p></div>
+    <VaultGraph graph={graph} />
+  </div></section>
+</BaseLayout>

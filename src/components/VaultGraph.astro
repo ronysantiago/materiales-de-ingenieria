@@ -1,0 +1,57 @@
+---
+interface GraphNode {
+  id: string;
+  label: string;
+  title: string;
+  category: string;
+  folder: string;
+  href: string;
+  sourcePath: string;
+  tags: string[];
+  x: number;
+  y: number;
+  degree: number;
+}
+interface GraphEdge { from: string; to: string; }
+interface GraphData { count: number; edgeCount: number; nodes: GraphNode[]; edges: GraphEdge[]; }
+const { graph } = Astro.props as { graph: GraphData };
+const safeGraph = JSON.stringify(graph).replace(/</g, '\\u003c');
+const categories = [...new Set(graph.nodes.map((node) => node.category))].sort((a, b) => a.localeCompare(b, 'es'));
+---
+<div class="vault-graph-shell" id="vault-graph-shell" data-count={graph.count}>
+  <div class="vault-graph-toolbar">
+    <label class="graph-control"><span>Buscar una nota</span><input id="vault-graph-search" class="field" type="search" placeholder="Ej. tratamientos térmicos, aluminio…" autocomplete="off" /></label>
+    <label class="graph-control"><span>Carpeta</span>
+      <select id="vault-graph-category" class="field">
+        <option value="">Todas las carpetas</option>
+        {categories.map((category) => <option value={category}>{category}</option>)}
+      </select>
+    </label>
+    <button class="button button-outline" id="vault-graph-reset" type="button">Recentrar grafo</button>
+  </div>
+  {graph.count > 0 ? (
+    <div class="vault-graph-stage">
+      <canvas id="vault-graph-canvas" aria-label="Grafo interactivo de notas de Obsidian" role="img"></canvas>
+      <div class="vault-graph-help">Desplaza el fondo para mover el mapa · Usa la rueda para acercar o alejar · Selecciona un nodo para consultar la nota · Doble clic para abrirla</div>
+    </div>
+  ) : (
+    <div class="vault-empty-state">
+      <div class="vault-empty-icon">◎</div>
+      <h2>La bóveda todavía no está conectada</h2>
+      <p>Cuando cargues la carpeta completa de Obsidian dentro de <code>/boveda</code> en el repositorio, este grafo se generará automáticamente a partir de los enlaces internos <code>[[...]]</code>.</p>
+      <a class="button button-primary" href="/boveda/">Ver cómo se integra la bóveda</a>
+    </div>
+  )}
+  <div class="vault-graph-footer">
+    <p id="vault-graph-status" aria-live="polite">{graph.count} notas · {graph.edgeCount} conexiones detectadas.</p>
+    <div class="graph-legend"><span><i class="legend-dot vault-dot"></i> Nota</span><span><i class="legend-dot vault-dot-linked"></i> Nota con conexiones</span></div>
+  </div>
+  <aside class="vault-node-detail" id="vault-node-detail" aria-live="polite">
+    <div><span class="eyebrow">Nota seleccionada</span><h3 id="vault-node-title">Selecciona un nodo del grafo</h3><p id="vault-node-meta">Las conexiones y la carpeta de origen aparecerán aquí.</p></div>
+    <a id="vault-node-open" class="button button-primary" href="/boveda/" aria-disabled="true">Abrir nota <span aria-hidden="true">↗</span></a>
+  </aside>
+  <script type="application/json" id="vault-graph-data" set:html={safeGraph}></script>
+</div>
+<script>
+  import '../scripts/vault-graph.js';
+</script>
