@@ -1,4 +1,0 @@
-# Archivos de trabajo que no necesita el despliegue
-node_modules
-.git
-.vscode
