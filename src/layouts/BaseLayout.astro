@@ -5,7 +5,7 @@ import 'katex/dist/katex.min.css';
 interface Props {
   title?: string;
   description?: string;
-  active?: 'inicio' | 'programa' | 'temas' | 'laboratorios' | 'mapa' | 'buscar' | 'boveda' | 'grafo';
+  active?: 'inicio' | 'programa' | 'temas' | 'laboratorios' | 'mapa' | 'buscar' | 'boveda' | 'grafo' | 'herramientas';
 }
 
 const {
@@ -19,6 +19,7 @@ const navItems = [
   { label: 'Programa', href: '/programa/', key: 'programa' },
   { label: 'Temas', href: '/temas/', key: 'temas' },
   { label: 'Laboratorios', href: '/laboratorios/', key: 'laboratorios' },
+  { label: 'Laboratorio', href: '/herramientas/diagramas-de-fase/', key: 'herramientas' },
   { label: 'Bóveda', href: '/boveda/', key: 'boveda' },
   { label: 'Grafo', href: '/grafo/', key: 'grafo' },
 ];
