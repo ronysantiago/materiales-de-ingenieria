@@ -1,0 +1,174 @@
+---
+import BaseLayout from '@layouts/BaseLayout.astro';
+import '@styles/ternary-lab.css';
+---
+<BaseLayout
+  title="Laboratorio de Diagramas de Fase"
+  description="Visualización tridimensional didáctica de diagramas ternarios genéricos A–B–C, cortes isotérmicos y recorridos de calentamiento y enfriamiento."
+  active="herramientas"
+>
+  <section class="page-hero ternary-hero">
+    <div class="page-hero-inner">
+      <div class="breadcrumbs"><a href="/">Inicio</a><span aria-hidden="true">/</span><span>Herramientas</span><span aria-hidden="true">/</span><strong>Diagramas de fase</strong></div>
+      <span class="eyebrow">Laboratorio digital · Sistemas ternarios genéricos</span>
+      <h1>Laboratorio de Diagramas de Fase</h1>
+      <p>Explora sistemas A–B–C en tres dimensiones, desplaza planos isotérmicos paralelos a la base y recorre la fusión durante el calentamiento y la solidificación durante el enfriamiento.</p>
+      <div class="ternary-hero-meta">
+        <span><i class="status-dot"></i> Modelo interactivo</span>
+        <span>Composición · Temperatura · Fases</span>
+        <span>Universidad de Los Andes</span>
+      </div>
+    </div>
+  </section>
+
+  <div class="ternary-lab-page" id="ternary-lab">
+    <div class="container ternary-container">
+      <section class="model-notice" aria-label="Alcance del modelo">
+        <span class="notice-icon">i</span>
+        <div>
+          <strong>Modelo didáctico esquemático</strong>
+          <p>Los campos, superficies y fracciones se generan con reglas ilustrativas para aprender la geometría y la lectura de sistemas ternarios. No son datos CALPHAD ni representan una aleación real. La microestructura es una representación visual, no una simulación cinética.</p>
+        </div>
+      </section>
+
+      <section class="lab-control-card" aria-labelledby="model-controls-title">
+        <div class="lab-section-heading">
+          <div>
+            <span class="eyebrow">01 · Configuración del sistema</span>
+            <h2 id="model-controls-title">Selecciona el comportamiento de solubilidad</h2>
+          </div>
+          <span class="lab-step-tag">Sistema A – B – C</span>
+        </div>
+        <div class="model-control-grid">
+          <label class="field-group model-field" for="model-select">
+            <span class="field-label">Modelo ternario</span>
+            <select id="model-select">
+              <option value="complete">Solubilidad sólida completa</option>
+              <option value="partial" selected>Solubilidad sólida parcial</option>
+              <option value="limited">Solubilidad sólida muy limitada</option>
+            </select>
+            <small id="model-description">Soluciones sólidas terminales α, β y γ con regiones de coexistencia entre ellas.</small>
+          </label>
+          <div class="field-group composition-field">
+            <div class="field-heading"><label for="composition-a-slider">Componente A</label><output id="composition-a-output">34 %</output></div>
+            <input id="composition-a-slider" type="range" min="0" max="100" step="1" value="34" />
+            <div class="range-endpoints"><span>0 %</span><span>100 %</span></div>
+          </div>
+          <div class="field-group composition-field">
+            <div class="field-heading"><label for="composition-b-slider">Componente B</label><output id="composition-b-output">33 %</output></div>
+            <input id="composition-b-slider" type="range" min="0" max="100" step="1" value="33" />
+            <div class="range-endpoints"><span>0 %</span><span>100 %</span></div>
+          </div>
+          <div class="composition-total-card">
+            <span>Componente C</span>
+            <strong id="composition-c-output">33 %</strong>
+            <small>C = 100 % − A − B</small>
+          </div>
+        </div>
+        <div class="composition-equation"><span>Composición global:</span><strong>X<sub>A</sub> + X<sub>B</sub> + X<sub>C</sub> = 1</strong><span>Selecciona un punto directamente en el corte triangular.</span></div>
+        <div class="surface-toggles" role="group" aria-label="Capas visibles en el diagrama tridimensional">
+          <span>Capas visibles:</span>
+          <label><input id="show-liquidus" type="checkbox" checked /> Superficie liquidus</label>
+          <label><input id="show-solidus" type="checkbox" checked /> Superficie solidus</label>
+          <label><input id="show-solvus" type="checkbox" checked /> Superficies solvus</label>
+        </div>
+      </section>
+
+      <section class="thermal-control-card" aria-labelledby="thermal-title">
+        <div class="thermal-heading">
+          <div>
+            <span class="eyebrow">02 · Recorrido térmico</span>
+            <h2 id="thermal-title">Calentamiento, fusión y solidificación</h2>
+          </div>
+          <output id="temperature-output" class="temperature-readout">1180 °C</output>
+        </div>
+        <div class="temperature-slider-row">
+          <span>300 °C</span>
+          <input id="temperature-slider" type="range" min="300" max="1600" step="5" value="1180" aria-label="Temperatura del plano de corte" />
+          <span>1600 °C</span>
+        </div>
+        <div class="thermal-actions">
+          <div class="direction-switch" role="group" aria-label="Dirección del recorrido térmico">
+            <button type="button" id="direction-cooling" class="direction-button is-selected">↓ Enfriar / solidificar</button>
+            <button type="button" id="direction-heating" class="direction-button">↑ Calentar / fundir</button>
+          </div>
+          <button type="button" id="play-button" class="lab-button lab-button-primary">Iniciar enfriamiento</button>
+          <button type="button" id="reset-temperature" class="lab-button lab-button-quiet">Centrar en la zona pastosa</button>
+          <label class="speed-control" for="speed-slider"><span>Recorrido</span><input id="speed-slider" type="range" min="5" max="100" value="32" /><output id="speed-output">32 °C/s</output></label>
+        </div>
+        <p class="thermal-hint">Al calentar, la fracción sólida disminuye y el material se funde; al enfriar, la fracción sólida aumenta. La velocidad es didáctica y no representa una cinética experimental.</p>
+      </section>
+
+      <div class="lab-workspace">
+        <section class="visual-panel panel-3d" aria-labelledby="volume-title">
+          <div class="visual-panel-heading">
+            <div><span class="eyebrow">03 · Vista espacial</span><h2 id="volume-title">Diagrama ternario 3D</h2></div>
+            <button type="button" id="reset-view" class="icon-lab-button" title="Restablecer vista">↺ <span>Restablecer</span></button>
+          </div>
+          <div class="canvas-stage canvas-stage-3d">
+            <canvas id="ternary-3d-canvas" aria-label="Prisma ternario tridimensional interactivo con superficies liquidus y solidus y plano de corte isotérmico"></canvas>
+            <div class="canvas-legend-overlay"><span><i class="legend-dot legend-liquidus"></i> Liquidus</span><span><i class="legend-dot legend-solidus"></i> Solidus</span><span><i class="legend-dot legend-solvus"></i> Solvus</span><span><i class="legend-dot legend-slice"></i> Corte isotérmico</span></div>
+          </div>
+          <div class="canvas-instructions"><span>↔ Arrastra para rotar</span><span>Rueda para acercar o alejar</span><span>El plano permanece paralelo a la base</span></div>
+        </section>
+
+        <div class="side-visuals">
+          <section class="visual-panel slice-panel" aria-labelledby="slice-title">
+            <div class="visual-panel-heading compact-heading"><div><span class="eyebrow">04 · Intersección</span><h2 id="slice-title">Corte isotérmico</h2></div><span class="mini-temperature" id="slice-temperature">T constante</span></div>
+            <p class="panel-intro">Vista 2D del plano horizontal. Haz clic dentro del triángulo para elegir la composición global.</p>
+            <canvas id="ternary-slice-canvas" aria-label="Corte triangular isotérmico. Haz clic para seleccionar una composición."></canvas>
+            <div class="slice-axis-labels"><span>A: 100 %</span><span>Composición B–C</span><span>B: 100 %</span></div>
+          </section>
+
+          <section class="visual-panel micro-panel" aria-labelledby="micro-title">
+            <div class="visual-panel-heading compact-heading"><div><span class="eyebrow">05 · Interior del material</span><h2 id="micro-title">Microestructura</h2></div><span class="micro-tag">Esquemática</span></div>
+            <canvas id="microstructure-canvas" aria-label="Representación esquemática de granos y fase líquida durante el calentamiento o enfriamiento"></canvas>
+            <p class="panel-intro" id="micro-caption">Sección 2D esquemática: los granos sólidos aparecen o se reducen mientras cambia la fracción líquida.</p>
+          </section>
+        </div>
+      </div>
+
+      <section class="phase-summary" aria-labelledby="phase-summary-title">
+        <div class="phase-summary-main">
+          <span class="eyebrow">06 · Estado del sistema</span>
+          <h2 id="phase-summary-title">Fases en la composición seleccionada</h2>
+          <div class="phase-current" id="phase-current" aria-live="polite">L + α + β + γ</div>
+          <p id="phase-explanation">Coexisten líquido y sólido dentro del intervalo de solidificación.</p>
+        </div>
+        <div class="phase-metrics">
+          <div class="phase-metric"><span>Temperatura liquidus</span><strong id="liquidus-value">1260 °C</strong></div>
+          <div class="phase-metric"><span>Temperatura solidus</span><strong id="solidus-value">1095 °C</strong></div>
+          <div class="phase-metric"><span>Fracción sólida</span><strong id="solid-fraction-value">44 %</strong><div class="fraction-track"><span id="solid-fraction-bar"></span></div></div>
+        </div>
+      </section>
+
+      <section class="phase-legend-section" aria-label="Leyenda de fases">
+        <div><span class="phase-swatch swatch-liquid"></span><span>L · Líquido</span></div>
+        <div><span class="phase-swatch swatch-alpha"></span><span>α · Sólido terminal A</span></div>
+        <div><span class="phase-swatch swatch-beta"></span><span>β · Sólido terminal B</span></div>
+        <div><span class="phase-swatch swatch-gamma"></span><span>γ · Sólido terminal C</span></div>
+      </section>
+
+      <section class="lab-explanation-grid">
+        <article class="explanation-card">
+          <span class="eyebrow">Cómo leer el modelo</span>
+          <h3>Un punto, tres variables</h3>
+          <p>La posición dentro de la base triangular define la composición A–B–C. La altura representa la temperatura. Cada plano horizontal selecciona una sección de composición constante en temperatura.</p>
+          <div class="equation-display">X<sub>A</sub> + X<sub>B</sub> + X<sub>C</sub> = 1</div>
+        </article>
+        <article class="explanation-card">
+          <span class="eyebrow">Límites del prototipo</span>
+          <h3>Visualización antes de CALPHAD</h3>
+          <p>Las superficies liquidus y solidus tienen inclinaciones definidas artificialmente. Las regiones α, β y γ ilustran solubilidad completa, parcial o muy limitada; no sustituyen un cálculo de equilibrio ni predicen la microestructura real.</p>
+          <p class="next-stage-note">Siguiente etapa: cargar bases termodinámicas y calcular secciones isotérmicas de sistemas reales.</p>
+        </article>
+      </section>
+
+      <div class="lab-footer-note"><strong>Alcance académico:</strong> este primer laboratorio permite comprender la geometría de los diagramas ternarios, los cortes isotérmicos y la lectura conceptual del calentamiento y enfriamiento. Las fracciones y los granos se representan de forma didáctica, sin afirmar una cinética física.</div>
+    </div>
+  </div>
+  <script>
+    import { initTernaryLab } from '../../../scripts/ternary-lab.js';
+    initTernaryLab();
+  </script>
+</BaseLayout>
