@@ -22,8 +22,9 @@
     "build": "astro build",
     "preview": "astro preview",
     "astro": "astro",
-    "validate:content": "node scripts/verificar-contenidos.mjs"
+    "validate:content": "node scripts/verificar-contenidos.mjs",
+    "validate:ternary": "node scripts/validar-modelo-ternario.mjs"
   },
   "type": "module",
-  "version": "0.2.1"
+  "version": "0.3.0"
 }
